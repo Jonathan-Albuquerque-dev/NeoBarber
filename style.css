@@ -1,0 +1,271 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #EDE8DE; /* Fundo bege claro da logo */
+    color: #2E2E2E; /* Texto preto/cinza muito escuro */
+}
+
+.text-accent-black {
+    color: #2E2E2E; /* Cor de destaque para títulos e links - preto */
+}
+
+.bg-light-header {
+    background-color: #F8F5EE; /* Cor mais clara para o cabeçalho */
+}
+
+.bg-gradient-barber {
+    background: linear-gradient(135deg, #F0EADF 0%, #EDE8DE 100%); /* Gradiente suave em tons de bege */
+}
+
+.section-background-1 {
+    background-color: #F4F1EA; /* Fundo para seções principais */
+}
+
+.section-background-2 {
+    background-color: #FCF9F3; /* Fundo para seções alternadas, ligeiramente mais claro */
+}
+
+.card-background {
+    background-color: #FFFFFF; /* Fundo para cartões de serviço/depoimento - branco puro */
+}
+
+.border-light-gray {
+    border-color: #D3CDC1; /* Borda suave para elementos */
+}
+
+.text-primary {
+    color: #2E2E2E; /* Cor padrão para a maioria dos textos */
+}
+
+.text-secondary {
+    color: #555555; /* Cor para textos secundários, como descrições */
+}
+
+.btn-primary {
+    background-color: #2E2E2E; /* Botão principal com fundo preto */
+    color: #FFFFFF; /* Texto branco no botão */
+    padding: 0.75rem 2rem;
+    display: inline-block;
+    white-space: normal;
+    text-align: center;
+}
+
+.btn-primary:hover {
+    background-color: #444444; /* Hover mais escuro para o botão */
+}
+
+/* Botão de contato do WhatsApp */
+.btn-contact {
+    background-color: #25D366; /* Cor do WhatsApp */
+    color: #FFFFFF;
+    padding: 0.75rem 2rem;
+    display: inline-flex; /* Permite ícone e texto na mesma linha */
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    text-align: center;
+    border-radius: 9999px; /* Botão arredondado */
+    font-weight: 700;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-contact:hover {
+    background-color: #1DA851;
+    transform: translateY(-2px);
+}
+
+.btn-contact svg {
+    margin-right: 0.5rem;
+}
+
+/* Botão para Agendamento Online */
+.btn-appointment {
+    background-color: #007BFF; /* Cor azul para agendamento */
+    color: #FFFFFF;
+    padding: 0.75rem 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    text-align: center;
+    border-radius: 9999px; /* Botão arredondado */
+    font-weight: 700;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-appointment:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.btn-appointment svg {
+    margin-right: 0.5rem;
+}
+
+.section-padding {
+    padding: 4rem 1rem;
+}
+
+@media (min-width: 768px) {
+    .section-padding {
+        padding: 6rem 4rem;
+    }
+}
+
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); /* Sombra mais suave para o tema claro */
+}
+
+/* Estilos para o carrossel da galeria */
+.carousel-container {
+    position: relative;
+    max-width: 1200px;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.carousel-track {
+    display: flex;
+}
+
+.carousel-slide {
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 0.5rem;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+@media (min-width: 768px) {
+    .carousel-slide {
+        width: calc(100% / 3);
+    }
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(46, 46, 46, 0.6);
+    color: white;
+    border: none;
+    padding: 0.7rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    z-index: 5;
+}
+
+.carousel-button:hover {
+    background-color: rgba(46, 46, 46, 0.9);
+}
+
+.carousel-button.prev {
+    left: 20px;
+}
+
+.carousel-button.next {
+    right: 20px;
+}
+
+.carousel-dots {
+    text-align: center;
+    padding: 1.5rem 0 0.5rem;
+}
+
+.dot {
+    height: 12px;
+    width: 12px;
+    margin: 0 5px;
+    background-color: #D3CDC1;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #2E2E2E;
+}
+
+.star-rating {
+    color: #FFD700;
+}
+
+/* Estilos para Planos de Assinatura */
+.plan-card {
+    background-color: #2E2E2E;
+    color: #FFFFFF;
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plan-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+}
+
+.plan-price {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.plan-benefits li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.plan-benefits svg {
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+}
+
+.plan-benefits .icon-check {
+    color: #25D366; /* Verde */
+}
+
+.plan-benefits .icon-cross {
+    color: #EF4444; /* Vermelho */
+}
+
+.btn-subscribe {
+    background-color: #D9534F; /* Tom de vermelho/laranja */
+    color: #FFFFFF;
+    padding: 0.75rem 2rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn-subscribe:hover {
+    background-color: #C9302C;
+}
