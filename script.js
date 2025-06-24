@@ -9,12 +9,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Lógica para o Carrossel da Galeria ---
     const galleryImages = [
-        'https://placehold.co/800x600/F4F1EA/2E2E2E?text=Corte+Moderno',
-        'https://placehold.co/800x600/EDE8DE/2E2E2E?text=Barba+Modelada',
-        'https://placehold.co/800x600/FCF9F3/2E2E2E?text=Ambiente+Aconchegante',
-        'https://placehold.co/800x600/F8F5EE/2E2E2E?text=Produtos+de+Qualidade',
-        'https://placehold.co/800x600/D3CDC1/2E2E2E?text=Cliente+Satisfeito',
-        'https://placehold.co/800x600/F4F1EA/2E2E2E?text=Navalha+Afiada'
+        './assets/img/corte de cabelo masculino.jpg',
+        './assets/img/corte de cabelo masculino.jpg',
+        './assets/img/corte de cabelo masculino.jpg',
+        './assets/img/corte de cabelo masculino.jpg',
+        './assets/img/corte de cabelo masculino.jpg',
+        './assets/img/corte de cabelo masculino.jpg'
     ];
     
     const carouselContainer = document.querySelector('.carousel-container');
