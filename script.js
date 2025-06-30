@@ -1,168 +1,142 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileNavPanel = document.getElementById('mobile-nav-panel');
+    const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+    const closeMenuButton = document.getElementById('close-menu-button');
 
-            // --- Lógica para o Menu Mobile ---
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+    function openMenu() {
+        mobileNavPanel.classList.remove('-translate-x-full');
+        mobileNavOverlay.classList.remove('hidden');
+        document.body.classList.add('menu-open');
+    }
 
-            // --- Lógica para o Carrossel da Galeria ---
-           const galleryImages = [
-                './assets/img/corte de cabelo masculino.jpg',
-                './assets/img/corte de cabelo masculino.jpg',
-                './assets/img/corte de cabelo masculino.jpg',
-                './assets/img/corte de cabelo masculino.jpg',
-                './assets/img/corte de cabelo masculino.jpg',
-                './assets/img/corte de cabelo masculino.jpg'
-            ];
-
-            
-            const carouselContainer = document.querySelector('.carousel-container');
-            const carouselTrack = document.querySelector('.carousel-track');
-            const dotsContainer = document.querySelector('.carousel-dots');
-            carouselTrack.innerHTML = '';
-            dotsContainer.innerHTML = '';
-            
-            galleryImages.forEach((src, index) => {
-                const slide = document.createElement('div');
-                slide.classList.add('carousel-slide');
-                const img = document.createElement('img');
-                img.src = src;
-                img.alt = 'Imagem da Galeria';
-                img.onerror = function() { this.src='https://placehold.co/800x600/CCCCCC/FFFFFF?text=Erro'; };
-                slide.appendChild(img);
-                carouselTrack.appendChild(slide);
-
-                const dot = document.createElement('span');
-                dot.classList.add('dot');
-                dot.dataset.index = index;
-                dotsContainer.appendChild(dot);
-            });
-
-            const prevButton = document.querySelector('.carousel-button.prev');
-            const nextButton = document.querySelector('.carousel-button.next');
-            const originalSlides = Array.from(carouselTrack.children);
-            const dots = Array.from(dotsContainer.children);
-            const totalRealSlides = originalSlides.length;
-            let counter = 1;
-            let slideWidth = 0;
-            let isTransitioning = false;
-            let autoplayInterval;
-
-            function setupInfiniteLoop() {
-                if (totalRealSlides <= 1) return;
-
-                const firstClone = originalSlides[0].cloneNode(true);
-                const lastClone = originalSlides[totalRealSlides - 1].cloneNode(true);
-                
-                carouselTrack.appendChild(firstClone);
-                carouselTrack.prepend(lastClone);
-
-                slideWidth = originalSlides[0].getBoundingClientRect().width;
-                carouselTrack.style.transform = `translateX(${-slideWidth * counter}px)`;
-            }
-
-            function moveSlides(direction) {
-                if (isTransitioning) return;
-                isTransitioning = true;
-                
-                carouselTrack.style.transition = 'transform 0.4s ease-in-out';
-                counter += direction;
-                carouselTrack.style.transform = `translateX(${-slideWidth * counter}px)`;
-                
-                updateDots();
-            }
-
-            function updateDots() {
-                let realIndex;
-                if (counter === 0) {
-                    realIndex = totalRealSlides - 1;
-                } else if (counter === totalRealSlides + 1) {
-                    realIndex = 0;
-                } else {
-                    realIndex = counter - 1;
+    function closeMenu() {
+        mobileNavPanel.classList.add('-translate-x-full');
+        mobileNavOverlay.classList.add('hidden');
+        document.body.classList.remove('menu-open');
+    }
+    
+    mobileMenuButton.addEventListener('click', openMenu);
+    closeMenuButton.addEventListener('click', closeMenu);
+    mobileNavOverlay.addEventListener('click', closeMenu);
+    
+    document.querySelectorAll('.nav-link').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            closeMenu();
+            if (this.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = document.getElementById('header').offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
                 }
-                dots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === realIndex);
-                });
             }
-            
-            carouselTrack.addEventListener('transitionend', () => {
-                if (counter <= 0) {
-                    carouselTrack.style.transition = 'none';
-                    counter = totalRealSlides;
-                    carouselTrack.style.transform = `translateX(${-slideWidth * counter}px)`;
-                }
-
-                if (counter > totalRealSlides) {
-                    carouselTrack.style.transition = 'none';
-                    counter = 1;
-                    carouselTrack.style.transform = `translateX(${-slideWidth * counter}px)`;
-                }
-                isTransitioning = false;
-            });
-            
-            const startAutoplay = () => {
-                stopAutoplay();
-                autoplayInterval = setInterval(() => moveSlides(1), 4000);
-            };
-
-            const stopAutoplay = () => clearInterval(autoplayInterval);
-            
-            function initializeCarousel() {
-                setupInfiniteLoop();
-                updateDots();
-                startAutoplay();
-            }
-
-            carouselContainer.addEventListener('mouseenter', stopAutoplay);
-            carouselContainer.addEventListener('mouseleave', startAutoplay);
-            nextButton.addEventListener('click', () => moveSlides(1));
-            prevButton.addEventListener('click', () => moveSlides(-1));
-            
-            dotsContainer.addEventListener('click', (e) => {
-                const targetDot = e.target.closest('.dot');
-                if (targetDot) {
-                    const targetIndex = parseInt(targetDot.dataset.index);
-                    counter = targetIndex + 1; // Ajusta o contador para o slide real correspondente
-                    carouselTrack.style.transition = 'transform 0.4s ease-in-out';
-                    carouselTrack.style.transform = `translateX(${-slideWidth * counter}px)`;
-                    updateDots();
-                }
-            });
-
-            window.addEventListener('resize', () => {
-                slideWidth = originalSlides[0].getBoundingClientRect().width;
-                carouselTrack.style.transition = 'none';
-                carouselTrack.style.transform = `translateX(${-slideWidth * counter}px)`;
-            });
-
-            initializeCarousel();
-            
-            // --- Lógica para Rolagem Suave (Smooth Scrolling) ---
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    if(targetElement) {
-                        const headerOffset = document.querySelector('header').offsetHeight;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                        window.scrollTo({
-                             top: offsetPosition,
-                             behavior: "smooth"
-                        });
-                        
-                        if (mobileMenu.contains(this) && !mobileMenu.classList.contains('hidden')) {
-                            mobileMenu.classList.add('hidden');
-                        }
-                    }
-                });
-            });
-
-            // --- Atualiza o ano no rodapé ---
-            document.getElementById('current-year').textContent = new Date().getFullYear();
         });
+    });
+    
+    function setupCarousel(containerId, items, isService) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const track = container.querySelector('.carousel-track');
+        const prevBtn = container.querySelector('.carousel-button.prev');
+        const nextBtn = container.querySelector('.carousel-button.next');
+        if (!track || !prevBtn || !nextBtn) return;
+
+        track.innerHTML = '';
+        items.forEach(item => {
+            const slide = document.createElement('div');
+            slide.className = 'carousel-slide';
+            if (isService) {
+                slide.innerHTML = `
+                    <div class="bg-dark-200 rounded-lg overflow-hidden group h-full flex flex-col p-6 text-center">
+                        <div class="w-20 h-20 bg-dark-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-10 h-10 text-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4 text-white">${item.name}</h3>
+                        <ul class="service-details text-sm flex-grow text-left">
+                            <li><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.993.883L4 8v10a1 1 0 00.883.993L5 19h10a1 1 0 00.993-.883L16 18V8a1 1 0 00-.883-.993L15 7h-1V6a4 4 0 00-4-4zm2 5H8v1h4V7zM9 1a5 5 0 014.899 4.12L14 6v1h1a2 2 0 011.995 1.85L17 9v9a2 2 0 01-1.85 1.995L15 20H5a2 2 0 01-1.995-1.85L3 18V9a2 2 0 011.85-1.995L5 7h1V6a5 5 0 014.1-4.899L11 1z" clip-rule="evenodd" fill-rule="evenodd"></path></svg><span>Preço: ${item.price}</span></li>
+                            <li><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.286 2.143L13 21l-2.286-6.857L5 12l5.286-2.143L13 3z"></path></svg><span>NEO CLUB: ${item.club ? 'Incluso no plano' : 'Consulte desconto'}</span></li>
+                            <li><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span>Tempo aprox: ${item.time}</span></li>
+                        </ul>
+                    </div>`;
+            } else {
+                 slide.innerHTML = `<img src="${item}" alt="Foto da galeria" class="w-full h-64 md:h-80 object-cover rounded-lg">`;
+            }
+            track.appendChild(slide);
+        });
+
+        let currentIndex = 0;
+        const totalSlides = items.length;
+        
+        function updateCarousel() {
+            const slides = track.querySelectorAll('.carousel-slide');
+            if (slides.length === 0) return;
+            
+            let itemsPerView = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+            
+            const maxIndex = totalSlides - itemsPerView;
+            if (currentIndex > maxIndex) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = totalSlides - 1;
+            
+            const slideWidth = slides[0].getBoundingClientRect().width;
+            track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        }
+        
+        nextBtn.addEventListener('click', () => {
+            currentIndex++;
+            updateCarousel();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex--;
+            updateCarousel();
+        });
+        
+        window.addEventListener('resize', updateCarousel);
+        updateCarousel(); // Initial call
+    }
+
+    const services = [
+        { name: 'Corte', price: 'R$ 50,00', club: true, time: '45 min' },
+        { name: 'Barba', price: 'R$ 50,00', club: true, time: '30 min' },
+        { name: 'Corte Infantil', price: 'R$ 55,00', club: false, time: '40 min' },
+        { name: 'Pai e Filho', price: 'R$ 95,00', club: false, time: '1h 20min' },
+        { name: 'Sobrancelha Navalhada', price: 'R$ 25,00', club: false, time: '15 min' },
+        { name: 'Sobrancelha Cera', price: 'R$ 35,00', club: false, time: '20 min' },
+        { name: 'Raspar (Máquina)', price: 'R$ 45,00', club: true, time: '25 min' },
+        { name: 'Raspar Cabeça (Navalha)', price: 'R$ 55,00', club: true, time: '35 min' },
+        { name: 'Pezinho (Cabelo)', price: 'R$ 40,00', club: false, time: '20 min' },
+        { name: 'Pezinho (Barba)', price: 'R$ 40,00', club: false, time: '20 min' },
+        { name: 'Penteado', price: 'R$ 35,00', club: false, time: '20 min' },
+        { name: 'Limpeza Orelha', price: 'R$ 30,00', club: false, time: '15 min' },
+        { name: 'Limpeza Nasal', price: 'R$ 30,00', club: false, time: '15 min' },
+        { name: 'Limpeza (Combo)', price: 'R$ 50,00', club: false, time: '25 min' },
+        { name: 'Hidratação Cabelo', price: 'A partir de R$ 40,00', club: false, time: '30 min' },
+        { name: 'Hidratação Barba', price: 'A partir de R$ 40,00', club: false, time: '25 min' },
+        { name: 'Alisamento Selagem + Corte', price: 'A partir de R$ 130,00', club: false, time: '1h 45min' },
+        { name: 'Alisamento Selagem', price: 'A partir de R$ 110,00', club: false, time: '1h 30min' },
+        { name: 'Alisamento Botox + Corte', price: 'A partir de R$ 120,00', club: false, time: '1h 40min' },
+        { name: 'Alisamento Botox', price: 'A partir de R$ 100,00', club: false, time: '1h 30min' },
+    ];
+    setupCarousel('services-carousel', services, true);
+
+    const galleryImages = [
+        'https://placehold.co/600x800/FFFFFF/121212?text=Galeria+1',
+        'https://placehold.co/600x800/FFFFFF/121212?text=Galeria+2',
+        'https://placehold.co/600x800/FFFFFF/121212?text=Galeria+3',
+        'https://placehold.co/600x800/FFFFFF/121212?text=Galeria+4',
+        'https://placehold.co/600x800/FFFFFF/121212?text=Galeria+5',
+        'https://placehold.co/600x800/FFFFFF/121212?text=Galeria+6'
+    ];
+    setupCarousel('gallery-carousel', galleryImages, false);
+
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+});
